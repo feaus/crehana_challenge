@@ -19,7 +19,8 @@ def get_post_by_id(post_id: uuid.UUID) -> Posts:
 
 
 def get_posts():
-    yield db.query(Posts).all()  # TODO: yield or return?
+    for post in db.query(Posts).all():
+        yield post
 
 
 def store_post(request_post: PostsModel) -> Posts:
