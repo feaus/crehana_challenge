@@ -3,7 +3,7 @@ import uuid
 from sqlalchemy import Column, Integer, String
 from sqlalchemy.dialects.postgresql import UUID
 
-from src.database.database import Base
+from src.database.connection import Base
 
 
 class Posts(Base):
