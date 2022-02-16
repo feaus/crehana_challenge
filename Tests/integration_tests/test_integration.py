@@ -1,4 +1,3 @@
-import copy
 import random
 import uuid
 from typing import List
@@ -6,7 +5,7 @@ from typing import List
 import pytest
 from fastapi.testclient import TestClient
 
-from src.database import SessionLocal
+from src.database.connection import SessionLocal
 from src.database.models.posts import Posts
 from src.main import app
 
