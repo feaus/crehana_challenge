@@ -3,6 +3,7 @@ import uuid
 
 from src.database.connection import SessionLocal
 from src.database.models.posts import Posts
+from src.exceptions import ResourceAlreadySynced
 from src.serializers.posts import PostsModel
 
 
@@ -28,13 +29,13 @@ def get_posts():
 
 
 def store_post(request_post: PostsModel) -> Posts:
-    existing_post = db.query(Posts).filter(
-        Posts.integration_id == request_post.integration_id,
+    existing_post: Posts = db.query(Posts).filter(
+        Posts.integration_id == request_post.integration_id,).filter(
         Posts.deleted_at == None,
     ).first()
 
-    # if existing_post is not None:  # TODO: raise exception
-    #     raise Exception
+    if existing_post is not None:
+        raise ResourceAlreadySynced(resource='post')
 
     new_post = Posts(
         id=uuid.uuid4(),

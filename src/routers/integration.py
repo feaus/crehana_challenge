@@ -7,6 +7,7 @@ from fastapi import APIRouter, status
 
 from src.controllers.posts import (
     delete_post_from_database, get_post_by_id, store_post, update_post)
+from src.exceptions import ExternalError, ResourceNotFound
 from src.serializers.posts import PostsModel
 
 
@@ -26,8 +27,8 @@ def save_post(post: PostsModel):
     }
     response = requests.post(f'{base_url}/posts', json=request_body)
 
-    # if response.status_code != 201:  # TODO: exception
-    #     raise Exception
+    if response.status_code != 201:
+        raise ExternalError
 
     new_id = response.json()['id']
 
@@ -45,8 +46,8 @@ def save_post(post: PostsModel):
 def put_post(post_id: uuid.UUID, post: PostsModel):
     stored_post = get_post_by_id(post_id)
 
-    # if stored_post is None:  # TODO: exception
-    #     raise Exception
+    if stored_post is None:
+        raise ResourceNotFound(resource='post', id_=post_id)
 
     base_url = os.environ.get('THIRD_PARTY_URL')
 
@@ -57,8 +58,8 @@ def put_post(post_id: uuid.UUID, post: PostsModel):
     }
     response = requests.put(f'{base_url}/posts/{post_id}', json=request_body)
 
-    # if response.status_code != 200:  # TODO: exception
-    #     raise Exception
+    if response.status_code != 200:
+        raise ExternalError
 
     updated_post = update_post(existing_post=stored_post, request_post=post)
 
@@ -72,8 +73,8 @@ def put_post(post_id: uuid.UUID, post: PostsModel):
 def patch_post(post_id: uuid.UUID, post: PostsModel):
     stored_post = get_post_by_id(post_id)
 
-    # if stored_post is None:  # TODO: exception
-    #     raise Exception
+    if stored_post is None:
+        raise ResourceNotFound(resource='post', id_=post_id)
 
     base_url = os.environ.get('THIRD_PARTY_URL')
 
@@ -84,8 +85,8 @@ def patch_post(post_id: uuid.UUID, post: PostsModel):
     }
     response = requests.patch(f'{base_url}/posts/{post_id}', json=request_body)
 
-    # if response.status_code != 200:  # TODO: exception
-    #     raise Exception
+    if response.status_code != 200:
+        raise ExternalError
 
     updated_post = update_post(existing_post=stored_post, request_post=post)
 
@@ -105,14 +106,14 @@ def patch_post(post_id: uuid.UUID, post: PostsModel):
 def delete_post(post_id: uuid.UUID):
     stored_post = get_post_by_id(post_id)
 
-    # if stored_post is None:  # TODO: exception
-    #     raise Exception
+    if stored_post is None:
+        raise ResourceNotFound(resource='post', id_=post_id)
 
     base_url = os.environ.get('THIRD_PARTY_URL')
     response = requests.delete(f'{base_url}/posts/{post_id}')
 
-    # if response.status_code != 200:  # TODO: exception
-    #     raise Exception
+    if response.status_code != 200:
+        raise ExternalError
 
     delete_post_from_database(stored_post)
 

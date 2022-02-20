@@ -3,6 +3,7 @@ import uuid
 from fastapi import APIRouter
 
 from src.controllers.posts import get_post_by_id, get_posts
+from src.exceptions import ResourceNotFound
 
 
 router = APIRouter(
@@ -23,8 +24,8 @@ def get_synced_posts():
 def get_synced_post(post_id: uuid.UUID):
     stored_post = get_post_by_id(post_id)
 
-    # if stored_post is None:  # TODO: raise custom exception
-    #     raise Exception
+    if stored_post is None:
+        raise ResourceNotFound(resource='post', id_=post_id)
 
     return {
         'message': 'Synced post returned successfully',
