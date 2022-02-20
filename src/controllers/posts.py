@@ -1,3 +1,4 @@
+import datetime
 import uuid
 
 from src.database.connection import SessionLocal
@@ -9,23 +10,27 @@ db = SessionLocal()
 
 
 def delete_post_from_database(post_to_delete: Posts) -> None:
-    db.delete(post_to_delete)
+    post_to_delete.deleted_at = datetime.datetime.now()
     db.commit()
     return
 
 
 def get_post_by_id(post_id: uuid.UUID) -> Posts:
-    return db.query(Posts).filter(Posts.id == post_id).first()
+    return db.query(Posts).filter(
+        Posts.id == post_id,
+        Posts.deleted_at == None,
+    ).first()
 
 
 def get_posts():
-    for post in db.query(Posts).all():
+    for post in db.query(Posts).filter(Posts.deleted_at == None).all():
         yield post
 
 
 def store_post(request_post: PostsModel) -> Posts:
     existing_post = db.query(Posts).filter(
-        Posts.integration_id == request_post.integration_id
+        Posts.integration_id == request_post.integration_id,
+        Posts.deleted_at == None,
     ).first()
 
     # if existing_post is not None:  # TODO: raise exception
