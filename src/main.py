@@ -1,8 +1,8 @@
 from pathlib import Path
 
-import graphene
 from dotenv import load_dotenv
 from fastapi import FastAPI
+from graphene import Schema
 from starlette_graphene3 import GraphQLApp
 
 from src.database.connection import Base, engine
@@ -30,7 +30,7 @@ app.include_router(synced.router)
 app.include_router(third_party.router)
 app.add_route(
     '/graphql',
-    GraphQLApp(schema=graphene.Schema(query=Query, mutation=Mutation))
+    GraphQLApp(schema=Schema(query=Query, mutation=Mutation))
 )
 app.add_exception_handler(ExternalError, external_error)
 app.add_exception_handler(ResourceAlreadySynced, resource_already_synced)
