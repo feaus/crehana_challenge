@@ -20,7 +20,7 @@ def get_synced_posts():
 
 
 @router.get('/posts/{post_id}')
-def get_synced_posts(post_id: uuid.UUID):
+def get_synced_post(post_id: uuid.UUID):
     stored_post = get_post_by_id(post_id)
 
     # if stored_post is None:  # TODO: raise custom exception
