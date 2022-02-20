@@ -150,6 +150,10 @@ class DeleteCar(graphene.Mutation):
     @staticmethod
     def mutate(parent, info, car_id):
         car: Cars = db.query(Cars).filter(Cars.id == car_id).first()
+
+        if car is None:
+            return
+
         car.deleted_at = datetime.datetime.now()
         db.commit()
         return
@@ -165,6 +169,10 @@ class DeleteCarDealer(graphene.Mutation):
     def mutate(parent, info, dealer_id):
         dealer: CarDealers = db.query(CarDealers).filter(
             CarDealers.id == dealer_id).first()
+
+        if dealer is None:
+            return
+
         dealer.deleted_at = datetime.datetime.now()
         db.commit()
         return
