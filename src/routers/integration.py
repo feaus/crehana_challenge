@@ -7,7 +7,7 @@ from fastapi import APIRouter, status
 
 from src.controllers.posts import (
     delete_post_from_database, get_post_by_id, store_post, update_post)
-from src.schemas.posts import PostsModel
+from src.serializers.posts import PostsModel
 
 
 router = APIRouter(
