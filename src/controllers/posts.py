@@ -51,7 +51,9 @@ def store_post(request_post: PostsModel) -> Posts:
 
 
 def update_post(existing_post: Posts, request_post: PostsModel) -> Posts:
-    existing_post.title = request_post.title
-    existing_post.body = request_post.body
+    if request_post.title is not None:
+        existing_post.title = request_post.title
+    if request_post.body is not None:
+        existing_post.body = request_post.body
     db.commit()
     return existing_post
