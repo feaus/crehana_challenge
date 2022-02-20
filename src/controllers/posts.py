@@ -2,7 +2,7 @@ import uuid
 
 from src.database.connection import SessionLocal
 from src.database.models.posts import Posts
-from src.schemas.posts import PostsModel
+from src.serializers.posts import PostsModel
 
 
 db = SessionLocal()
