@@ -56,7 +56,10 @@ def put_post(post_id: uuid.UUID, post: PostsModel):
         'body': post.body,
         'user_id': post.user_id,
     }
-    response = requests.put(f'{base_url}/posts/{post_id}', json=request_body)
+    response = requests.put(
+        f'{base_url}/posts/{stored_post.integration_id}',
+        json=request_body,
+    )
 
     if response.status_code != 200:
         raise ExternalError
@@ -83,7 +86,10 @@ def patch_post(post_id: uuid.UUID, post: PostsModel):
         'body': post.body,
         'user_id': post.user_id,
     }
-    response = requests.patch(f'{base_url}/posts/{post_id}', json=request_body)
+    response = requests.patch(
+        f'{base_url}/posts/{stored_post.integration_id}',
+        json=request_body,
+    )
 
     if response.status_code != 200:
         raise ExternalError
@@ -110,7 +116,7 @@ def delete_post(post_id: uuid.UUID):
         raise ResourceNotFound(resource='post', id_=post_id)
 
     base_url = os.environ.get('THIRD_PARTY_URL')
-    response = requests.delete(f'{base_url}/posts/{post_id}')
+    response = requests.delete(f'{base_url}/posts/{stored_post.integration_id}')
 
     if response.status_code != 200:
         raise ExternalError
