@@ -7,7 +7,7 @@ from starlette_graphene3 import GraphQLApp
 
 from src.routers import integration, synced, third_party
 from src.database.connection import Base, engine
-from src.schemas.query import Query, Mutation
+from src.schemas.query_and_mutations import Query, Mutation
 
 
 Base.metadata.create_all(bind=engine)
