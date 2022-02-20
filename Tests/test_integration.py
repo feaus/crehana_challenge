@@ -18,7 +18,7 @@ db = SessionLocal()
 def storing_post():
     new_post = Posts(
         id=uuid.uuid4(),
-        integration_id=random.randint(1, 1000),
+        integration_id=random.randint(1, 100),
         title=f'Testing title {random.randint(1, 1000)}',
         body=f'Testing body {random.randint(1, 1000)}',
         user_id=random.randint(1, 1000),
