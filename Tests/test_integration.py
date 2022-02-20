@@ -81,5 +81,8 @@ def test_patch_post(storing_post: List[Posts]):
 def test_delete_post(storing_post: List[Posts]):
     response = client.delete(f'/integration/posts/{storing_post[0].id}')
     assert response.status_code == 200
-    db_query = db.query(Posts).filter(Posts.id == storing_post[0].id).first()
+    db_query = db.query(Posts).filter(
+        Posts.id == storing_post[0].id,
+        Posts.deleted_at == None,
+    ).first()
     assert db_query is None
