@@ -3,11 +3,10 @@ import graphene
 from src.database.connection import SessionLocal
 from src.database.models.car_dealers import CarDealers
 from src.database.models.cars import Cars
-from src.serializers.cars import (
+from src.serializers.cars import CarsGraphQLInputModel, CarsGraphQLModel
+from src.serializers.car_dealers import (
     CarDealersGraphQLInputModel,
     CarDealersGraphQLModel,
-    CarsGraphQLInputModel,
-    CarsGraphQLModel,
 )
 
 
