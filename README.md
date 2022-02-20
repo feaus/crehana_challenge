@@ -1,35 +1,4 @@
-# crehana_challenge
-
-### MVPs
-
-1. Crear integración con el API Publica (https://jsonplaceholder.typicode.com/) y Guarda la información en una DB Postgres:
-
-    Dicha integración debe tener todo lo relacionado a una integración, como validación de datos enviados, validación de datos obtenidos y todas las capas necesarias para esta API.
-    
-    Debe integrar todos los métodos disponibles:
-    
-    GET 	/posts
-    GET 	/posts/1
-    GET 	/posts/1/comments
-    GET 	/comments?postId=1
-    POST 	/posts
-    PUT 	/posts/1
-    PATCH 	/posts/1
-    DELETE 	/posts/1
-    
-    Para esta integración no puede usar Django, tampoco puede usar Flask. Puede usar cualquier otra librería.
-
-
-2. Con la data fake que se guardo en la DB, se debe hacer un API que pueda guardar mas data (cualquier otra que no sea de la integracion) y consultar la información. El Api debe ser desarrollada en GraphQL. Librería recomendada: Graphene
-
-**Importante**:
-
-El código realizado puede subirlo a un repositorio publico para poder revisarlo. Recuerde que deben tener un README.md para conocer mas información del proyecto, también debe tener una manera fácil de como levantar el proyecto para que pueda ser probado de ser necesario.
-
-- Debe tener en cuenta los estándares al escribir código python.
-- Hacer pruebas unitarias es un plus.
-
-## Challenge
+# Crehana
 
 La aplicación está desarrollada en FastAPI. Para correrla localmente:
 1. Tener una instancia de Postgres corriendo.
@@ -39,7 +8,9 @@ La aplicación está desarrollada en FastAPI. Para correrla localmente:
 4. Instalar las dependencias del proyecto (`pip install -r requirements.txt`), preferentemente en un virtualenv.
 5. Ejecutar `uvicorn src.main:app --reload` desde la raíz del proyecto.  
 
-Los endpoints de esta aplicación son los siguientes:
+### Cómo se usa
+
+La aplicación tiene endpoints REST y endpoints implementados en GraphQL. Los primeros son los siguientes:
 - **GET** /thirdParty/posts
 - **GET** /thirdParty/posts/{id}
 - **GET** /thirdParty/posts/{id}/comments
@@ -51,8 +22,48 @@ Los endpoints de esta aplicación son los siguientes:
 - **PATCH** /integration/{id}
 - **DELETE** /integration/{id}
 
-Los endpoints con el prefijo **thirdParty** traen información directamente de la API con la que se integró. Los que tienen el prefijo **synced** traen información de la DB. Y aquellos que tienen **integration** ejecutan acciones tanto sobre la DB como sobre la API.
+Aquellos que contienen el prefijo **thirdParty** traen información directamente de la API con la que se integró. Los que tienen el prefijo **synced** traen información de la DB. Y aquellos que tienen **integration** ejecutan acciones tanto sobre la DB como sobre la API.
 
-## Tests
+Por otro lado, se encuentra también disponible un endpoint implementado en GraphQL:
+- **POST** /graphql
 
-Los tests se encuentran en el directorio `Tests`. Para correrlos, ejecutar desde la raíz del repositorio `pytest`. Por el momento solo se cuenta con tests de integración.
+Desde este endpoint se pueden realizar mutaciones y queries de la base de datos, de las tablas `cars` y `car_dealers`. A continuación, un ejemplo de mutación para crear un objeto en `cars`:
+
+```
+mutation createCar {
+  createCar(carDetails: {
+    brand: "Peugeot",
+    model: "307",
+    year: 2016
+  })
+  {
+    id
+    brand
+    model
+    year
+  }
+}
+```
+
+Y para realizar una query para un solo auto:
+
+```
+query getSingleCar {
+  getCar(carId: "30e70221-4b5b-483c-ad7f-290a9f0a901a") {
+    id
+    brand
+    model
+    year
+  }
+}
+```
+
+### Tests
+
+Los tests se encuentran en el directorio `Tests`. Para correrlos, ejecutar desde la raíz del repositorio `pytest`, o `coverage run -m pytest` para obtener un informe sobre el coverage del testeo (ejecutando `coverage report` finalizado el testing. El coverage alcanza el 87%. 
+
+Por el momento solo se cuenta con tests de integración.
+
+### MVPs
+
+Los MVPs se pueden consultar [en este enlace](https://pastebin.com/raw/TcQvPWPw).
